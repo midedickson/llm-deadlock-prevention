@@ -11,6 +11,16 @@ from constants import (
     DEADLOCK,
 )
 
+
+# Function to generate explanations based on the Deadlock column
+def generate_explanation(row):
+    if row[DEADLOCK] == "Yes":
+        explanation = "Yes, this situation leads to a deadlock due to multiple processes locking resources without release, creating a circular wait condition."
+    else:
+        explanation = "No, this situation does not lead to a deadlock as the resource requests can be satisfied without causing a cyclical dependency among the processes."
+    return explanation
+
+
 with open("process_simulation_data.csv") as simulation_csv_file:
     reader = csv.reader(simulation_csv_file)
     jsonl_content = ""
@@ -30,7 +40,7 @@ with open("process_simulation_data.csv") as simulation_csv_file:
                 },
                 {
                     "role": "assistant",
-                    "content": f"{row[DEADLOCK]}, there is {'a' if row[DEADLOCK]== 'Yes' else 'no'} potential deadlock according to this log entry.",
+                    "content": generate_explanation(row),
                 },
             ]
         }

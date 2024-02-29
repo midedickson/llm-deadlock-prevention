@@ -1,4 +1,3 @@
-
 # constant keys for the position index of csv data
 TIMESTAMP = 0
 PROCESS_ID = 1
@@ -8,3 +7,4 @@ LOCK_STATUS = 4
 TRANSACTION_STATUS = 5
 SYSTEM_LOAD = 6
 DEADLOCK = 7
+EXPLANATION = 7
