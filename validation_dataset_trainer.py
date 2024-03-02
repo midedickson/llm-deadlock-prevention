@@ -15,18 +15,20 @@ with open("process_validation_data.csv") as validation_csv_file:
     reader = csv.reader(validation_csv_file)
     jsonl_content = ""
     for row in reader:
+        system_content = (
+            f"System Log: Timestamp {row[TIMESTAMP]}, Process {row[PROCESS_ID]} has requested {row[RESOURCE_REQUEST]} for {row[MESSAGE_TYPE]} operation. "
+            f"Current lock status is {row[LOCK_STATUS].lower()} and transaction status is {row[TRANSACTION_STATUS].lower()}. "
+            f"The system load is at {row[SYSTEM_LOAD]}, indicating {"high_activity" if row[SYSTEM_LOAD] > 0.7 else "moderate activity"}."
+        )
         entry = {
             "messages": [
                 {
                     "role": "system",
-                    "content": f"The system log entry is as follows: Timestamp: {row[TIMESTAMP]}, "
-                    f"ProcessID: {row[PROCESS_ID]}, ResourceRequest: {row[RESOURCE_REQUEST]}, "
-                    f"MessageType: {row[MESSAGE_TYPE]}, LockStatus: {row[LOCK_STATUS]}, "
-                    f"TransactionStatus: {row[TRANSACTION_STATUS]}, SystemLoad: {row[SYSTEM_LOAD]}",
+                    "content": system_content,
                 },
                 {
                     "role": "user",
-                    "content": "Is there a potential deadlock according to this log entry?",
+                    "content": "Given the system log entry above, analyze the likelihood of a deadlock scenario and provide your assessment.",
                 },
             ],
             "expected_result": row[DEADLOCK],
